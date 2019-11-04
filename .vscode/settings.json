@@ -1,0 +1,5 @@
+{
+    "files.autoSave": "afterDelay",
+    "eslint.autoFixOnSave": true,
+    "prettier.arrowParens": "always"
+}
