@@ -1,8 +1,8 @@
 <script>
 import Editor from './Editor.svelte'
 import List from './List.svelte'
-import { things } from '../mockups'
-export let name;
+import { things } from '../stories/mockups'
+export let name
 </script>
 
 <style>
