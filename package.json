@@ -28,7 +28,7 @@
     "sirv-cli": "^0.4.4"
   },
   "scripts": {
-    "storybook": "start-storybook -p 5001",
+    "storybook": "start-storybook -p 5001 --ci",
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "start": "sirv public --single",
