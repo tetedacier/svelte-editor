@@ -1,3 +1,3 @@
 import { configure } from '@storybook/svelte';
 
-configure(require.context('../src/stories', true, /\.js$/), module);
+configure(require.context('../src', true, /\.stories\.js$/), module);
