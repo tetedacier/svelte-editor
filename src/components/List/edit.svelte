@@ -5,45 +5,22 @@ const handlers = []
 /**
  * @param selector String [css selector string]()
  */
-class Selector {
-  static get(cssSelector) {
-    return Array.from(document.querySelectorAll('form'))
-  }
-  static handledEvents (appliedEvent) {
-    const handlers = []
 
-    onMount()
-    onDestroy()
-  }
-
-  static onMount () {
-
-    handlers.concat(Array.from(document.querySelectorAll('form')).map(form => ({
-      node: form,
-      event: 'submit',
-      handler: form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        return false
-      })
-    })))
-
-    let eventName = 'change'
-    Array.from(document.querySelectorAll('fieldset input[name="height"]')).map()
-  }
-
-  static onDestroy () {
-    handlers.map(entry => {
-      entry.node.removeEventListener(entry.event, entry.handler)
-    })
-  }
-  static handleSelector (cssSelector, handler) {
-  }
-}
 
 export let editedHeigth = '300px';
 $: heigth = editedHeigth;
 
-// ['onMount', 'onDestroy'].reduce()
+const formSubmitEvent =  (event) => {
+  console.log('prevent');
+
+  event.preventDefault();
+  return false
+}
+const heightChangeEvent = (event) => {
+  const {srcElement: {value} } = event
+
+  editedHeigth = value
+}
 </script>
 
 <style>
@@ -52,10 +29,10 @@ $: heigth = editedHeigth;
   }
 </style>
 
-<form>
+<form on:submit={formSubmitEvent}>
   <fieldset>
     <legend>Update Component height</legend>
-    <input name="height" type="text" value={heigth} />
+    <input on:change={heightChangeEvent} type="text" value={heigth} />
     <SizeControl bind:editedHeigth={editedHeigth} />
   </fieldset>
 </form>
