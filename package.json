@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "devDependencies": {
     "@babel/core": "^7.6.4",
+    "@isomorphic-git/lightning-fs": "^3.4.0",
     "@storybook/svelte": "^5.2.5",
     "babel-loader": "^8.0.6",
-    "browserfs": "^1.4.3",
     "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.5.0",
     "eslint-config-standard": "^14.1.0",
