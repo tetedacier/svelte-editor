@@ -31,9 +31,17 @@ const listToTree = (list) => list.reduce((fileTree, currentPath) => {
           }
           root = root.content.filter((item) => item.name === pathItem)[0]
         }
-        root.content.push({ type: 'file', name: path.slice(-1)[0] })
+        root.content.push({
+            type: 'file',
+            name: path.slice(-1)[0],
+            relative_path: currentPath
+          })
       } else {
-        fileTree.content.push({ type: 'file', name: path[0] })
+        fileTree.content.push({
+          type: 'file',
+          name: path[0],
+          relative_path: currentPath
+        })
       }
     }
   }
@@ -87,7 +95,7 @@ fs.mkdir(dir, (error)=> {
     console.warn(readArgs)
   })
 
-  git.listFiles({dir}).then((filesList)=> {
+  git.listFiles({ dir }).then((filesList)=> {
     tree = listToTree(filesList)
   })
 
