@@ -11,7 +11,6 @@ const {
   ratio: RatioSizeControl
 } = SizeControl;
 
-export let displayedPixelHeigth = "100px"
 export let pxHeight = '300px';
 $: heigth = pxHeight;
 $: mode = 'px'

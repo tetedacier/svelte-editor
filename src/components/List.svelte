@@ -6,11 +6,16 @@ let start
 let end
 $: height = '500px'
 
+
+
 $: editorShown = false;
 const toggleEditor = (event) => {
   editorShown = event.srcElement.checked
 }
 export let things
+const hideEditor = () => {
+  editorShown = false
+}
 </script>
 <style>
 .editor {
@@ -27,6 +32,7 @@ export let things
 }
 
 </style>
+
 <form>
   <label>
     <input on:change={toggleEditor} type="checkbox" name="editor" bind:value={editorShown} />
@@ -38,6 +44,7 @@ export let things
   <div class="editor">
     <ListEdit
       bind:pxHeight={height}
+      close={hideEditor}
     />
   </div>
 {/if}

@@ -4,10 +4,7 @@ import { createEventDispatcher } from 'svelte';
 const dispatch = createEventDispatcher();
 
 export let stepSize = 0
-export let RE = false
 export let unit = false
-export let ending = false
-export let unitHeight = '0'
 export let pxHeight = '42px'
 export let editedValue ='0'
 $: height = pxHeight.slice(0, -2);
