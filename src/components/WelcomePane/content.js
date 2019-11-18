@@ -1,6 +1,6 @@
-# Goals
+export default `# Goals
 
-This page show the different UI entities and concept involved in the [`@tetedacier/svelte-editor`](https://tetedacier.github.io/svelte-editor) application
+This page show the different UI entities and concept involved in the [` + '`@tetedacier/svelte-editor`' + `](https://tetedacier.github.io/svelte-editor) application
 
 
 ## Component
@@ -15,3 +15,4 @@ This component provide basic nesting, layering, theming and transition to compos
 ## Customization
 
 ### Keyboard configuration
+`

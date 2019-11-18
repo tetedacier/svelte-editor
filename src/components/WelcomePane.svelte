@@ -5,7 +5,7 @@ import remark from 'remark'
 import recommended from 'remark-preset-lint-recommended'
 import html from 'remark-html'
 import report from 'vfile-reporter'
-import Welcome from './Welcome.md'
+import Welcome from './WelcomePane/content'
 
 $: transformedMessage = ''
 onMount(()=>{
@@ -13,8 +13,9 @@ onMount(()=>{
     .use(recommended)
     .use(html)
     .process(Welcome, function(err, file) {
-
-      console.error( file)
+      if(err) {
+        throw err
+      }
       transformedMessage = file.contents
     })
 })
