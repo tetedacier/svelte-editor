@@ -1,31 +1,36 @@
 <script>
-import { onMount } from 'svelte';
+import { onMount, createEventDispatcher } from 'svelte';
+import Console from './Console.svelte'
+import { AceEditor } from './Editor/index.js'
+// Props
+export let value = ''
+export let grammar = 'text'
+export let path = '/tutorial/README.md'
 
-$:editedValue = `h1 {
-	color: purple;
+const dispatch = createEventDispatcher()
+
+// Local state
+$: config = {
+  value,
+  grammar,
+  path
 }
-.container {
-	min-height: 200px;
-	height: 100%;
-	max-height: 300px;
-}`
-
-let aceEditor
 
 onMount(() => {
-  var editor = ace.edit(aceEditor)
-  editor.setTheme("ace/theme/monokai")
-  var CssMode = ace.require("ace/mode/css").Mode
-  editor.session.setMode(new CssMode())
-  // editor.setValue(editedValue)
+  console.log({raw:{
+    path,
+    value,
+    grammar
+  }, config})
 })
 
 </script>
-<style>
-.editor {
-    width: 100%;
-    height: 300px;
-}
-</style>
-
-<div class="editor" bind:this={aceEditor}>{editedValue}</div>
+<Console
+  bind:path={path}
+  bind:grammar={grammar}
+/>
+{#if config.value !== '' && config.grammar && config.path}
+  <AceEditor
+    bind:doc={config}
+  />
+{/if}
