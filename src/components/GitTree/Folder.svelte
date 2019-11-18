@@ -1,17 +1,27 @@
 <script>
+import { openRe } from '../../matchers'
 import File from './File.svelte'
 import Folder from './Folder.svelte'
 export let content = { name: '', content:[] }
-const open_re = /\s*\bopen\b\s*/
+
+export let state = ""
+export let show = () => {}
 </script>
 
 <style>
   .folder{
     background-color: bisque;
   }
+  .folder {
+    cursor: zoom-in;
+  }
+  .open > .folder {
+    cursor: zoom-out;
+  }
 
   .open > ul {
     display: block;
+
   }
 
   ul {
@@ -25,24 +35,17 @@ const open_re = /\s*\bopen\b\s*/
   }
 </style>
 
-<li class="open">
+<li class={state}>
   <span on:click={(event) => {
-    console.warn(event.srcElement.parentNode.className)
-    if (open_re.test(event.srcElement.parentNode.className)) {
-      event.srcElement.parentNode.className = event.srcElement.parentNode.className.replace(open_re, ' ');
-    } else {
-      event.srcElement.parentNode.className = event.srcElement.parentNode.className + ' open';
-    }
-    console.warn(event.srcElement.parentNode.className)
-
+    state = state ? '' : 'open'
   }} class="folder">{content.name}</span>
   <ul>
     {#each content.content as leaf }
       {#if leaf.type === 'folder'}
-        <Folder content={leaf} />
+        <Folder content={leaf} show={show} />
       {/if}
       {#if leaf.type === 'file'}
-        <File content={leaf} />
+        <File content={leaf} show={show} />
       {/if}
     {/each}
   </ul>

@@ -3,6 +3,7 @@ export let content = {
   name: '',
   relative_path: ''
 };
+export let show = (event) => { console.warn(event) }
 </script>
 
 <style>
@@ -12,7 +13,7 @@ export let content = {
 </style>
 
 <li>
-  <a href={`#${content.relative_path}`} tile={`Show ${content.relative_path}'s content`}>
+  <a on:click={show} href={`#${content.relative_path}`} data-path={content.relative_path} tile={`Show ${content.relative_path}'s content`}>
     {content.name}
   </a>
 </li>
