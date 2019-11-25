@@ -1,12 +1,12 @@
 <script>
-import { onMount } from 'svelte'
+import { onMount, beforeUpdate, afterUpdate } from 'svelte'
+export let height = "300px"
 export let doc = {
   path: '',
   grammar: 'text',
   value : '',
   rid: ''
 }
-
 const createEditMode = (grammarMode) => {
   const EditMode =ace.require(`ace/mode/${grammarMode}`).Mode;
   // insertOptionsHere
@@ -17,30 +17,37 @@ $: path = doc.path
 $: grammar = doc.grammar
 $: value = doc.value
 $: rid = doc.rid
+
+
+const resize = () => {
+  let editor = ace.edit(aceEditor)
+  editor.container.style.height = height
+  editor.resize()
+}
+beforeUpdate(() => {
+  resize()
+})
+afterUpdate(() => {
+  resize()
+})
 onMount(() => {
   let editor = ace.edit(aceEditor)
-  console.log({
-    path,
-    grammar,
-    value
-  })
-
-  // const EditMode  = ace.require(`ace/mode/${sessionGrammar}`).Mode
   editor.setTheme("ace/theme/monokai")
   editor.session.setMode(createEditMode(grammar))
   editor.session.setValue(value)
+  resize()
 })
 </script>
 
 <style>
-.editor {
-    width: 100%;
-    height: 300px;
+#editor {
+  width: 100%;
+  height: 300px;
 }
 </style>
 
 <section>
   {#if path && grammar && value }
-    <div class="editor" bind:this={aceEditor}>{value}</div>
+    <div id="editor" bind:this={aceEditor}>{value}</div>
   {/if}
 </section>
