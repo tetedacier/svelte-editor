@@ -1,5 +1,5 @@
 <script>
-import svelte, { onMount, onDestroy, createEventDispatcher } from 'svelte'
+import { onMount, onDestroy, createEventDispatcher } from 'svelte'
 import SizeControl from '../SizeControl'
 
 import { unitRe } from '../../matchers'
