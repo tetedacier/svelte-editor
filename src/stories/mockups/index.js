@@ -1,3 +1,21 @@
+const rawTodo = [
+  { done: false, description: 'write some docs' },
+  { done: false, description: 'start writing blog post' },
+  { done: true, description: 'buy some milk' },
+  { done: false, description: 'mow the lawn' },
+  { done: false, description: 'feed the turtle' },
+  { done: false, description: 'fix some bugs' }
+]
+const todosGenerator = function * (todos) {
+  let uid = 1
+  for (const todo of todos) {
+    todo.id = uid++
+    yield todo
+  }
+}
+
+export const todos = [...todosGenerator(rawTodo)]
+
 export const things = [
   // these can be any values you like
   {
