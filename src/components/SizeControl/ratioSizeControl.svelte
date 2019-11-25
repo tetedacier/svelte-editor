@@ -12,14 +12,18 @@ const unit = '%'
 
 $:ratioHeight = `${ratio}${unit}`
 export let pxHeight = '100px';
-$: ratio = Math.round(parseInt(pxHeight.slice(0, -2), 10)/document.getElementsByTagName('html')[0].scrollHeight*100)
+
+$: ratio = Math.round(parseInt(pxHeight.slice(0, -2), 10)/document.getElementsById('root').offsetHeight*10000)/100
 $: height = pxHeight;
 $: editedValue =  `${ratio}${unit}`
+onMount(()=> {
+  ratio = Math.round(parseInt(pxHeight.slice(0, -2), 10)/document.getElementsById('root').offsetHeight*100)
+})
 export const toPx = (value) => `400px`
 
 const ending = unitRe(unit)
 export const RE = endingRe(unit)
-const applyRatioOnDocumentHeight = (ratio) => Math.round(ratio  / 100 * document.getElementsByTagName('html')[0].scrollHeight)
+const applyRatioOnDocumentHeight = (ratio) => Math.round(ratio  / 100 * getElementsById('root').offsetHeight)
 const stepUpdate = (event)=>{
   ratio = event.detail.height.slice(0, -unit.length)
   pxHeight = `${applyRatioOnDocumentHeight(editedValue.slice(0, -unit.length))}px`
