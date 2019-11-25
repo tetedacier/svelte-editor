@@ -1,5 +1,6 @@
 .DS_Store
 node_modules
+public/ace
 public/bundle.*
 public/ace-bundle.*
 
