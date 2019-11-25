@@ -2,7 +2,6 @@ import { writable } from 'svelte/store'
 import { listToTree } from './struct'
 import * as LightningFS from '@isomorphic-git/lightning-fs'
 import * as git from 'isomorphic-git'
-import path from 'path'
 
 const FOLDER_EXIST = 'EEXIST'
 const encoding = 'utf8'
@@ -12,29 +11,37 @@ window.pfs = window.fs.promises
 git.plugins.set('fs', window.fs)
 
 export const dir = '/tutorial'
-export const targetedRepository = 'https://github.com/isomorphic-git/isomorphic-git'
-export const corsProxy = 'https://cors.isomorphic-git.org'
+export const targetedRepository = 'https://github.com/tetedacier/remark'
+export const corsProxy = 'http://localhost:9999'
 
 const acquireRepositories = () => new Promise((resolve, reject) => {
-  window.pfs.readdir('/', (error, fsList) => {
-    if (error) {
-      return reject(error)
-    }
-    resolve(fsList)
-  })
+  window.pfs.readdir('/', (error, fsList) => error ? reject(error) : resolve(fsList))
 })
+
 const listRepositoryTree = (dir) => new Promise((resolve) => {
   git.listFiles({ dir }).then((filesList) => {
     resolve(listToTree(filesList, dir))
   })
 })
+
 const readGitFile = (dir, filepath) => new Promise((resolve, reject) => {
-  window.pfs.readFile(path.join(dir, filepath)).then((content) => {
+  window.pfs.readFile(`${dir}/${filepath}`).then((content) => {
     resolve(new TextDecoder('utf-8').decode(content))
   }).catch((readFileError) => {
     reject(readFileError)
   })
 })
+
+const cloneSuccess = (resolve, options) =>
+  (...args) => resolve(
+    `git clone of "${options.url}" succeed width ${JSON.stringify(args, null, 2)}`
+  )
+
+const cloneFailure = (reject, options) =>
+  (gitCloneError) => reject(new Error(
+      `Errors occured during cloning of "${options.url}" in "${options.dir}" =>\n${JSON.stringify(gitCloneError, null, 2)}`
+  ))
+
 const gitClone = (
   dir = '/tutorial',
   url = '',
@@ -48,13 +55,11 @@ const gitClone = (
   ref,
   singleBranch,
   depth
-}).then(
-  (...args) => resolve(`git clone of "${url}" succeed width ${JSON.stringify(args, null, 2)}`)
-).catch(
-  (gitCloneError) => reject(new Error(
-      `Errors occured during cloning of "${url}" in "${dir}" =>\n${JSON.stringify(gitCloneError, null, 2)}`
-  ))
-))
+})
+  .then(cloneSuccess(resolve, { url }))
+  .catch(cloneFailure(reject, { url, dir }))
+)
+
 const readGitObject = (
   dir = '/tutorial',
   filepath = '',
@@ -70,6 +75,7 @@ const readGitObject = (
   reject(error)
 })
 )
+
 const cloneRepository = (
   dir = '/tutorial',
   url = targetedRepository
@@ -81,6 +87,7 @@ const cloneRepository = (
     ))
   : gitClone(dir, url)
 ))
+
 const filterTree = async (
   dir = '/tutorial',
   entry,
@@ -92,12 +99,14 @@ const filterTree = async (
     if (entry.path.endsWith(ending)) {
       const { object: blob } = await git.readObject({ dir, oid: entry.oid })
       if (blob.toString('utf8').includes(searchTerm)) {
+        // To be consolidated elsewhere
         console.log(`${prefix}/${entry.path}`)
       }
       return
     }
   }
 }
+
 const searchTree = async ({ oid, prefix = '' }, dir, searchTerm) => {
   const { object: tree } = await git.readObject({ dir, oid })
   for (const entry of tree.entries) {
@@ -115,15 +124,13 @@ const searchRepositoryFor = async (
 ) => {
   // Find all the .js files in the current master branch containing the word 'commit'
   const sha = await git.resolveRef({ dir, ref: 'master' })
-  console.log(sha)
   const { object: commit } = await git.readObject({ dir, oid: sha })
-  console.log(commit)
   await searchTree(
     { oid: commit.tree },
     searchTerm
   )
-  console.log('done')
 }
+
 export const repositories = writable([])
 
 export const gitFs = Object.freeze({
