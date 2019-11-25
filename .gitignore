@@ -2,3 +2,6 @@
 node_modules
 public/bundle.*
 public/ace-bundle.*
+
+### generated icon bundle
+src/components/graphics.js
