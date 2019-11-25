@@ -1,11 +1,33 @@
 <script>
+import { onMount } from 'svelte'
 import WelcomePane from './WelcomePane.svelte'
 import Editor from './Editor.svelte'
 import List from './List.svelte'
-import path from 'path'
 import Layout from './Layout'
 import GitTree from './GitTree.svelte'
 import { fileExtensionRe } from '../matchers'
+
+onMount(()=>{
+  const windowOnResize = (event) => {
+    const {
+      offsetHeight: height,
+      offsetWidth: width
+    } = document.getElementById('root')
+    Array.from(document.querySelectorAll(['tree-view','panes'].map(classToken=>`.${classToken}`).join(','))).forEach(node => {
+      node.style.height = `${height}px`
+    })
+  }
+
+  [
+    'resize',
+    'deviceorientation',
+    'deviceorientationabsolute'
+  ].map(eventName => window.addEventListener(eventName, (event) => {
+    event.srcName = eventName
+    windowOnResize(event)
+  }))
+})
+
 $: value = ''
 $: grammar = 'text'
 $: appPath = ''
@@ -37,17 +59,27 @@ const renderEditor = (event)=>{
   source.path = appPath =  currenPath = event.detail.filepath
   grammar = editorMode
   value =event.detail.value
-  console.log({
-    ...event.detail,
-    grammar
-  })
 }
-
 </script>
 
 <style>
+
+:global(#root) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.panes,
+.tree-view {
+  overflow: scroll;
+}
+
 .editor {
   display: flex;
+  height: 100%;
 }
 
 .editor .tree-view{
@@ -61,8 +93,9 @@ const renderEditor = (event)=>{
   min-width: 67%;
 }
 </style>
-<section class="editor">
-  <aside class="tree-view">
+
+<section id="editor-wrapper" class="editor">
+  <aside class="tree-view" >
     <GitTree on:show={renderEditor} on:select={loadEditor}/>
   </aside>
   <section class="panes">
