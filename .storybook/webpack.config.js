@@ -2,9 +2,6 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = async ({ config }) => {
-  // console.dir(, { depth: null })
-  // console.dir(config.module.rules, { depth: null })
-  // config.module.rules.filter(rule => )
   config.module.rules.reduce((rules, rule) => {
     if (rule.test === /\.css$/) {
       return Object.assign({
@@ -12,9 +9,6 @@ module.exports = async ({ config }) => {
             {
               loader: MiniCssExtractPlugin.loader,
               options: {
-                // you can specify a publicPath here
-                // by default it uses publicPath in webpackOptions.output
-                // publicPath: '../',
                 hmr: process.env.NODE_ENV === 'development',
               },
             }
@@ -32,13 +26,7 @@ module.exports = async ({ config }) => {
         emitCss: true,
       },
     },
-  }/*, {
-    test: /\.css$/,
-    use: ExtractTextPlugin.extract({
-      fallback: 'style-loader',
-      use: 'css-loader',
-    }),
-  }*/]);
+  }]);
   const cssExtractPlugin = [new MiniCssExtractPlugin({
     // Options similar to the same options in webpackOptions.output
     // all options are optional
@@ -49,8 +37,7 @@ module.exports = async ({ config }) => {
   const plugins = config.plugins
     ? Array.prototype.concat(config.plugins, cssExtractPlugin)
     : cssExtractPlugin
-  // .resolve.mainFields = Array.assign({}, config.resolve.mainFields)
-  // return console.dir(config, { depth: null }) || config;
+
   return config.resolve.mainFields
     ? Object.assign(
       {
@@ -76,15 +63,3 @@ module.exports = async ({ config }) => {
       config
     );
 }
-
-// Export a function. Accept the base config as the only param.
-// module.exports = async ({ config, mode }) => {
-//   const svelteLoader = config.module.rules.find(r => r.loader && r.loader.includes('svelte-loader'));
-//   svelteLoader.options = {
-//     preprocess: {
-//       style: (...args)=>{
-//         console.log(args)
-//       }
-//     }
-//   };
-// }
