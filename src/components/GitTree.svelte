@@ -4,9 +4,11 @@ import { gitFs, repositories } from '../stores/repositories.js'
 import File from './GitTree/File.svelte'
 import Folder from './GitTree/Folder.svelte'
 
-export let targetedRepository = 'https://github.com/tetedacier/sws';
 const dispatch = createEventDispatcher();
-const dir = '/tutorial'
+
+export let targetedRepository = 'https://github.com/tetedacier/remark';
+const dir = '/remark'
+
 let initialTree = {
   content: []
 }
@@ -14,18 +16,20 @@ $: errors = []
 $: tree = initialTree
 
 onMount(async () => {
-  await gitFs.cloneRepository(dir)
+  try {
+    await gitFs.cloneRepository(dir)
+  } catch(cloneIssue) {
+    console.error(cloneIssue)
+  }
   tree = await gitFs.listRepositoryTree(dir)
 })
 
 
 const showGitTree = async (event) => {
-  console.log('prevent default link in TreeView')
-  dispatch('select');
   event.preventDefault()
+  dispatch('select');
   const filepath = event.srcElement.dataset.path
   let value = await gitFs.readGitFile(dir, filepath);
-  console.log({filepath: event.srcElement.dataset.path,value,dir})
   dispatch('show', {
     filepath,
     dir,
@@ -39,26 +43,29 @@ ul {
   padding: 0;
   list-style: none;
 }
+.repository {
+  font-family: Menlo, Monaco, 'Courier New', monospace
+}
 </style>
 
 <form on:submit={(event) => {
   event.preventDefault()
 }}>
-  <lablel>
+  <label>
     Repositories
     <select>
       {#each repositories as repository}
         <option>{repository}</option>
       {/each}
     </select>
-  </lablel>
+  </label>
   <label>
     repository:
     <input type="text" name="repository" bind:value={targetedRepository} />
   </label>
 </form>
 <!-- <pre>{JSON.stringify(tree.content, null, 2)}</pre> -->
-<ul>
+<ul class="repository">
   {#each tree.content as leaf }
     {#if leaf.type === 'folder'}
       <Folder content={leaf} show={showGitTree} />

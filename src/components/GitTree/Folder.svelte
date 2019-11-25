@@ -5,7 +5,7 @@ import Folder from './Folder.svelte'
 export let content = { name: '', content:[] }
 
 export let state = ""
-export let show = () => {}
+export let show = (...args) => console.log(args)
 </script>
 
 <style>
@@ -36,7 +36,7 @@ export let show = () => {}
 </style>
 
 <li class={state}>
-  <span on:click={(event) => {
+  📂 <span on:click={(event) => {
     state = state ? '' : 'open'
   }} class="folder">{content.name}</span>
   <ul>
