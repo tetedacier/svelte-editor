@@ -6,3 +6,6 @@ public/ace-bundle.*
 
 ### generated icon bundle
 src/components/graphics.js
+
+### pid files
+cors-proxy.pid

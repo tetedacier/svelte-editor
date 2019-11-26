@@ -37,11 +37,14 @@
     "vfile-reporter": "^6.0.0"
   },
   "dependencies": {
+    "@isomorphic-git/cors-proxy": "^2.6.1",
     "@sveltejs/svelte-virtual-list": "^3.0.1",
     "sirv-cli": "^0.4.4"
   },
   "scripts": {
     "install": "./bin/post-install.sh",
+    "git-proxy-start": "cors-proxy start -d",
+    "git-proxy-stop": "cors-proxy stop",
     "storybook": "start-storybook -s ./public -p 5001 --ci",
     "build": "rollup -c",
     "build-graphics": "node src/graphics",
