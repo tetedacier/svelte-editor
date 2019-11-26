@@ -3,7 +3,6 @@ import { onMount } from 'svelte'
 import WelcomePane from './WelcomePane.svelte'
 import Editor from './Editor.svelte'
 import List from './List.svelte'
-import Layout from './Layout'
 import GitTree from './GitTree.svelte'
 import { fileExtensionRe } from '../matchers'
 
