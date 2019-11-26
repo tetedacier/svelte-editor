@@ -7,3 +7,5 @@ npm install
 popd
 
 ./bin/ace-bundle.sh
+
+node src/graphics
