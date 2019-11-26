@@ -41,6 +41,7 @@
     "sirv-cli": "^0.4.4"
   },
   "scripts": {
+    "install": "./bin/post-install.sh",
     "storybook": "start-storybook -s ./public -p 5001 --ci",
     "build": "rollup -c",
     "build-ace-bundle": "./bin/ace-bundle.sh",

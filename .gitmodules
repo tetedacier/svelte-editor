@@ -2,6 +2,6 @@
 	path = ace
 	url = git@github.com:ajaxorg/ace.git
 
-[submodule "wiki"]
+[submodule "docs/wiki"]
 	path = docs/wiki
-	url = git@localhost:tetedacier/svelte-editor/wiki.git
+	url = git://github.com/tetedacier/svelte-editor.wiki.git
